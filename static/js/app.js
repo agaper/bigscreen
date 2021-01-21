@@ -10,7 +10,6 @@ $(function(){
     options.listCopyed.innerHTML = options.listOri.innerHTML;
     if(!isVertical){
         var listUnitWidth = 0;
-        document.getElementsByClassName
         var listItems = options.listOri.childNodes;
         listItems.forEach(function(item){
           var space = document.defaultView.getComputedStyle(item, null)['marginRight']; 
