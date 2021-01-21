@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="628px" height="85px" viewBox="0 0 628 85" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.2 (67145) - http://www.bohemiancoding.com/sketch -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="2.33604653%" y1="50%" x2="99.0009815%" y2="50%" id="linearGradient-1">
+            <stop stop-color="#59C6ED" offset="0%"></stop>
+            <stop stop-color="#DEF5FF" offset="100%"></stop>
+        </linearGradient>
+        <polygon id="path-2" points="8.55768241 0 489.679639 0 498 9 0 9"></polygon>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Apple-TV标准版" transform="translate(-651.000000, 0.000000)">
+            <g id="大标题" transform="translate(0.000000, -14.000000)">
+                <g id="Group" transform="translate(652.000000, 13.000000)">
+                    <g id="编组-21" stroke="#0273F4" stroke-width="2">
+                        <polyline id="路径-3" points="0 0 30 85 55 85 66.5 73.5 320 73.5 345 73.5"></polyline>
+                        <polyline id="路径-3备份" transform="translate(453.500000, 42.500000) scale(-1, 1) translate(-453.500000, -42.500000) " points="281 0 311 85 336 85 347.5 73.5 601 73.5 626 73.5"></polyline>
+                    </g>
+                    <g id="位图" transform="translate(65.000000, 77.000000)">
+                        <mask id="mask-3" fill="white">
+                            <use xlink:href="#path-2"></use>
+                        </mask>
+                        <use id="蒙版" fill="url(#linearGradient-1)" xlink:href="#path-2"></use>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

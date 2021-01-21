@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新时代数据大屏</title>
+<script src="./static/js/flexible.js"></script>
+<link rel="stylesheet" href="./static/css/main.css">
+<link rel="stylesheet" href="./static/css/map.css">
+<style type="text/css">
+.amap-container{cursor:url(https://webapi.amap.com/theme/v1.3/openhand.cur),default;}
+.amap-drag{cursor:url(https://webapi.amap.com/theme/v1.3/closedhand.cur),default;}
+</style>
+
+</head>
+<body>
+  <!-- 文本大小使用rem，主要的布局元素使用vw、vh，根据效果图的尺寸进行计算 -->
+  <div id="app" v-cloak class="page">
+    <!-- 头部 -->
+    <div id="pageTop" class="page-top flex-row">
+      <div class="weather flex-1 fz20">
+        <span>{{pageData.bigConfig.daytemp}}℃ ~ {{pageData.bigConfig.nighttemp}}℃</span><span style="margin-left:51px;">{{pageData.bigConfig.dayweather}}</span>
+      </div>
+      <div class="title">
+        <span class="title-txt fz32">新时代文明实践中心</span>
+        <span class="title-blink"></span>
+      </div>
+      <div class="date flex-1 fz20">
+        <span>{{pageData.bigConfig.Ymd}}</span><span style="margin-left:84px;">{{pageData.bigConfig.week}}</span>
+      </div>
+    </div>
+    <!-- 主体内容 -->
+    <div class="page-bd flex-row flex-align-justify">
+
+      <div id="conLeft" class="con-left">
+        <div class="con-box first">
+          <div class="con-box-corner-lt"></div>
+          <div class="con-box-nail-rb"></div>
+          <div class="con-box-tite fz20">
+            <span class="txt">资讯统计</span>
+          </div>
+          <div class="news-chart">
+            <echart style="width: 100%; height: 100%;" :options="newsChartOption" />
+          </div>
+        </div>
+        <div class="con-box">
+          <div class="con-box-nail-lb"></div>
+          <div class="con-box-tite fz20">
+            <span class="txt">百姓点单</span>
+          </div>
+          <div class="nums flex-row flex-align-justify">
+            <div class="item">
+              <div class="item-name fz18">点单数</div>
+              <div class="fz20 bold">
+                <span class="counter" data-counter-time="2000" data-counter-delay="50">{{pageData.bigData.appealNum}}</span>
+              </div>
+            </div>
+            <div class="item">
+              <div class="item-name fz18">已处理点单</div>
+              <div class="fz20 bold">
+                <span class="counter" data-counter-time="2000" data-counter-delay="50">{{pageData.bigData.handleAppealNum}}</span>
+              </div>
+            </div>
+            <div class="item">
+              <div class="item-name fz18">未处理点单</div>
+              <div class="fz20 bold">
+                <span class="counter">{{pageData.bigData.notHandleAppealNum}}</span>
+              </div>
+            </div>
+          </div>  
+        </div>
+        <div class="con-box last">
+          <div class="con-box-corner-rb"></div>
+          <div class="con-box-tite fz20">
+            <span class="txt">志愿者排名TOP10</span>
+          </div>
+          
+          <div class="com-list">
+            <div class="com-list-hd flex-row flex-align-justify">
+              <div class="flex-1 fz16">志愿者排名</div>
+              <div class="flex-1 fz16">志愿者名称</div>
+              <div class="flex-1 fz16">服务时长(小时)</div>
+            </div>
+            <div class="scroller" style="height: 21.11vh;">
+              <div ref="listContainer1" class="scroller-container">
+                <div ref="listCopyed1" class="scroller-items"></div>
+                <div ref="listOri1" class="scroller-items">
+                  <div class="com-list-item scroller-item" v-for="(item, index) in pageData.bigDataRank.volunteer" :key="index">
+                    <div class="fz16 flex-1">{{index+1 | format_index}}</div>
+                    <div class="fz16 flex-1">{{item.volunteer_name}}</div>
+                    <div class="fz16 flex-1">{{item.activity_duration}}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="con-main">
+        <div id="conMainNums" class="nums is-main flex-row flex-align-justify">
+          <div class="item">
+            <div class="item-name fz20">志愿者总数</div>
+            <div class="fz24 bold">
+              <span class="counter" data-counter-time="2000" data-counter-delay="50">{{pageData.bigData.volunteerNum}}</span>
+            </div>
+          </div>
+          <div class="item">
+            <div class="item-name fz20">团队总数</div>
+            <div class="fz24 bold">
+              <span class="counter" data-counter-time="2000" data-counter-delay="50">{{pageData.bigData.teamNum}}</span>
+            </div>
+          </div>
+          <div class="item">
+            <div class="item-name fz20">阵地总数</div>
+            <div class="fz24 bold">
+              <span class="counter">{{pageData.bigData.standNum}}</span>
+            </div>
+          </div>
+        </div>
+        <div class="map-node">
+          <div id="mapBox"></div>
+          <div class="map-node-tip">
+            <div class="flex-row flex-col-center">
+              <div class="map-maker is-center"></div>
+              <span class="fz12">实践中心</span>
+            </div>
+            <div class="flex-row flex-col-center">
+              <div class="map-maker is-practice_stand"></div>
+              <span class="fz12">实践阵地</span>
+            </div>
+            <div class="flex-row flex-col-center">
+              <div class="map-maker is-practice_activity"></div>
+              <span class="fz12">公益活动</span>
+            </div>
+          </div>
+        </div>  
+        <div id="conPracticeTrends" class="con-box has-all-radius practice-trends">
+          <div class="con-box-corner-lt"></div>
+          <div class="con-box-corner-rb"></div>
+          <div class="con-box-tite fz20">
+            <span class="txt">实践动态</span>
+          </div>
+          <div class="scroller scroller-practice-trends" style="height: 13.88vh;">
+            <div ref="listContainerPracticeTrends" class="scroller-container">
+              <div ref="listCopyedPracticeTrends" class="scroller-items"></div>
+              <div ref="listOriPracticeTrends" class="scroller-items">
+                <div class="scroller-item" v-for="(item, index) in pageData.dynamic" :key="index">
+                  <img class="cover" :src="item.cover" alt="">
+                  <div class="title-w fz14 pj-clamp-txt">{{item.title}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div id="conRight" class="con-right">
+        <div class="con-box first">
+          <div class="con-box-corner-lt"></div>
+          <div class="con-box-nail-rb"></div>
+          <div class="con-box-tite fz20">
+            <span class="txt">宣传视频</span>
+          </div>
+          <div class="video-node">
+            <video controls preload :src="pageData.bigConfig.video_url"></video>
+          </div>  
+        </div>
+        <div class="con-box">
+          <div class="con-box-nail-lb"></div>
+          <div class="con-box-tite fz20">
+            <span class="txt">阵地排行TOP10</span>
+          </div>
+          
+          <div class="com-list">
+            <div class="com-list-hd flex-row flex-align-justify">
+              <div class=" fz16">名次</div>
+              <div class=" fz16">实践阵地</div>
+              <div class=" fz16">阵地类型</div>
+            </div>
+            <div class="scroller" style="height: 17.59vh;">
+              <div ref="listContainer2" class="scroller-container">
+                <div ref="listCopyed2" class="scroller-items"></div>
+                <div ref="listOri2" class="scroller-items">
+                  <div class="com-list-item scroller-item" v-for="(item, index) in pageData.bigDataRank.stand" :key="index">
+                    <div class="fz16 ">{{index+1 | format_index}}</div>
+                    <div class="zd-name fz16  pj-hide-txt">{{item.title}}</div>
+                    <div class="fz16 ">{{item.stand_category_name}}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>  
+
+        </div>
+        <div class="con-box last">
+          <div class="con-box-corner-rb"></div>
+          <div class="con-box-tite fz20">
+            <span class="txt">团队排行TOP10</span>
+          </div>
+          
+          <div class="com-list">
+            <div class="com-list-hd flex-row flex-align-justify">
+              <div class=" fz16">名次</div>
+              <div class=" fz16">志愿团队</div>
+              <div class=" fz16">团队类型</div>
+            </div>
+            <div class="scroller" style="height: 17.59vh;">
+              <div ref="listContainer3" class="scroller-container">
+                <div ref="listCopyed3" class="scroller-items"></div>
+                <div ref="listOri3" class="scroller-items">
+                  <div class="com-list-item scroller-item" v-for="(item, index) in pageData.bigDataRank.team" :key="index">
+                    <div class="fz16 ">{{index+1 | format_index}}</div>
+                    <div class="zd-name fz16  pj-hide-txt">{{item.title}}</div>
+                    <div class="fz16 ">{{item.team_category_name}}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>    
+
+        </div>
+      </div>
+
+    </div>
+
+    <transition name="pj-overlay-fade">
+      <div class="pj-overlay" v-show="showDetailDialog">
+        <div class="pj-dialog">
+          <img @click.stop="showDetailDialog=false;" class="close-dialog" src="./static/imgs/close_detail_dialog.svg" alt="">
+          <div class="bg-detail-dialog">
+            <div class="detail-dialog-title">{{detailDialogData.site_name || detailDialogData.title }}</div>
+            <div v-if="detailDialogType == 'practice_center'">
+              <div class="fz18">基本信息</div>
+              <div class="detail-dialog-fields">
+                <div class="pj-row">
+                  <div class="pj-justify-field">阵地类型</div>
+                  <div class="pj-justify-val">{{detailDialogData.practice_type}}</div>
+                </div>
+                <div class="pj-row">
+                  <div class="pj-justify-field">联系人</div>
+                  <div class="pj-justify-val">{{detailDialogData.contact_name}}</div>
+                </div>
+                <div class="pj-row">
+                  <div class="pj-justify-field">联系电话</div>
+                  <div class="pj-justify-val">{{detailDialogData.contact_information}}</div>
+                </div>
+                <div class="pj-row">
+                  <div class="pj-justify-field">所在地址</div>
+                  <div class="pj-justify-val">{{detailDialogData.address}}</div>
+                </div>
+              </div>
+              <div class="fz18">中心简介</div>
+              <div class="detail-dialog-fields">
+                <div class="pj-vertical-scrollerbar">
+                  <div class="pj-html-data fz16" v-html="detailDialogData.introduction"></div>
+                </div>
+              </div>
+            </div>
+            <div v-if="detailDialogType == 'practice_stand'">
+              <div class="fz18">基本信息</div>
+              <div class="detail-dialog-fields">
+                <div class="pj-row">
+                  <div class="pj-justify-field">阵地类型</div>
+                  <div class="pj-justify-val">{{detailDialogData.stand_category_name}}</div>
+                </div>
+                <div class="pj-row">
+                  <div class="pj-justify-field">联系人</div>
+                  <div class="pj-justify-val">{{detailDialogData.contact_name}}</div>
+                </div>
+                <div class="pj-row">
+                  <div class="pj-justify-field">联系电话</div>
+                  <div class="pj-justify-val">{{detailDialogData.contact_phone}}</div>
+                </div>
+                <div class="pj-row">
+                  <div class="pj-justify-field">所在地址</div>
+                  <div class="pj-justify-val">{{detailDialogData.contact_address}}</div>
+                </div>
+              </div>
+              <div class="fz18">中心简介</div>
+              <div class="detail-dialog-fields">
+                <div class="pj-vertical-scrollerbar">
+                  <div class="pj-html-data fz16" v-html="detailDialogData.content"></div>
+                </div>
+              </div>
+            </div>
+            <div v-if="detailDialogType == 'practice_activity'">
+              <div class="fz18">基本信息</div>
+              <div class="detail-dialog-fields is-activity">
+                <div class="pj-row">
+                  <div class="pj-justify-field">报名时间</div>
+                  <div class="pj-justify-val">{{detailDialogData.apply_time}}</div>
+                </div>
+                <div class="pj-row">
+                  <div class="pj-justify-field">活动时间</div>
+                  <div class="pj-justify-val">{{detailDialogData.activity_time}}</div>
+                </div>
+                <div class="pj-row">
+                  <div class="pj-justify-field">活动地址</div>
+                  <div class="pj-justify-val">{{detailDialogData.address}}</div>
+                </div>
+                <div class="pj-row">
+                  <div class="pj-justify-field">发起团队</div>
+                  <div class="pj-justify-val">{{detailDialogData.team_name}}</div>
+                </div>
+                <div class="pj-row">
+                  <div class="pj-justify-field">活动类型</div>
+                  <div class="pj-justify-val">{{detailDialogData.support_type_name}}</div>
+                </div>
+                <div class="pj-row">
+                  <div class="pj-justify-field">活动对象</div>
+                  <div class="pj-justify-val">{{detailDialogData.support_person_name}}</div>
+                </div>
+              </div>
+              <div class="fz18">中心简介</div>
+              <div class="detail-dialog-fields">
+                <div class="pj-vertical-scrollerbar">
+                  <div class="pj-html-data fz16" v-html="detailDialogData.content"></div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </transition>
+
+  </div>
+
+<script src="./static/js/echarts.js"></script>
+<script src="./static/js/vue.min.js"></script>
+<script src="./static/js/vue-echarts@4.0.2.js"></script>
+<script src="./static/js/jquery.min.js"></script>
+<script src="./static/js/jquery.waypoints.min.js"></script>
+<script src="./static/js/jquery.countup.min.js"></script>
+<script src="https://webapi.amap.com/maps?v=2.0&key=e81ca867d729d7ffc5ccb872523c0446	"></script>
+<script src="https://webapi.amap.com/ui/1.1/main.js"></script>
+<script src="./static/js/app.js"></script>
+</body>
+</html>
