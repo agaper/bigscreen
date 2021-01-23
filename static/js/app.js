@@ -129,7 +129,7 @@ $(function(){
               emphasis: {
                   label: {
                       show: true,
-                      fontSize: '30',
+                      fontSize: '16',
                       fontWeight: 'bold'
                   }
               },
@@ -173,6 +173,9 @@ $(function(){
     mounted: function() {
       var me = this;
       this.$nextTick(function(){
+        $(window).on('resize', function(){
+          me.$refs.pieChart.resize();
+        });
         $(document).on('click', function(evt){
           evt.stopPropagation();
           if( $(evt.target).hasClass('js-amap-closeWindow') ){
@@ -195,6 +198,8 @@ $(function(){
           $.getJSON(BASEURL + '/cms/api/v1/bigData/bigInfo')
         ).done(function (bigConfig, bigData, bigDataRank, dynamic, bigInfo) {
           me.pageData.bigConfig = bigConfig[0].data;
+          var center = me.pageData.bigConfig.center.split(',');
+          map.mapCenter = [center[0], center[1]];
           me.pageData.bigData = bigData[0].data;
           me.pageData.bigDataRank = bigDataRank[0].list;
           me.pageData.dynamic = dynamic[0];
@@ -219,7 +224,6 @@ $(function(){
         var me = this;
         $.get(BASEURL+'/xsd/api/v1/bigData/bigDataMap', function(res){
           if( res.success ){
-            map.mapCenter = [res.data.practice_center.lng, res.data.practice_center.lat];
             map.practice_activity = res.data.practice_activity;
             map.practice_stand = res.data.practice_stand;
 

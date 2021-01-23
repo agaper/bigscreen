@@ -80,6 +80,7 @@ audio:not([controls]){display: none; height: 0; }
 .page{ position: absolute; left:0; top:0; width: 100%; height: 100%; background: url(../imgs/bg_body.png) no-repeat center center; background-size: cover; overflow: hidden; }
 
 .page-top .title{ width: 32.6vw; height: 8vh; line-height: 8.3vh; text-align: center; background: url(../imgs/bg_top_title.svg) no-repeat center center; background-size: 100% 100%; position: relative; }
+.title-img{ width:29.16vw; height: 6.48vh; }
 
 @-webkit-keyframes focusMove {
   0% {
@@ -144,7 +145,7 @@ audio:not([controls]){display: none; height: 0; }
 .con-box-tite{ line-height: 2.59vh; font-weight: bold; }
 .con-box-tite .txt{ display: inline-block; position: relative; padding: 0 22px; }
 .con-box-tite .txt:before,
-.con-box-tite .txt:after{ content: ''; width: 19px; height: 18px; position: absolute; top: 2px }
+.con-box-tite .txt:after{ content: ''; width: 19px; height: 18px; position: absolute; top: 50%; transform: translate(0, -50%); }
 .con-box-tite .txt:before{ background: url(../imgs/title_left.svg) no-repeat left top; left:0; }
 .con-box-tite .txt:after{ background: url(../imgs/title_right.svg) no-repeat left top; right:0; }
 
@@ -174,15 +175,16 @@ audio:not([controls]){display: none; height: 0; }
 .com-list{ padding: 2.22vh 24px 0 24px; text-align: center; }
 .com-list-hd{ color:#4DB1F8; margin-bottom: 0.92vh; }
 .com-list-item{ display: flex; flex-direction: row; justify-content:space-between; color:#C2E1F7; font-weight: bold; margin-top: 1.48vh; }
-.com-list-item .zd-name{ max-width: 10vw; }
+.com-list-right .mid-col{ width: 14vw; }
+.com-list-right .field-name{ width: 5vw; }
 
 .video-node{ margin-top: 1vh; }
-.video-node video{ width: 100%; height: 19vh; object-fit: cover; }
+.video-node video{ width: 100%; height: 19vh; object-fit: fill; }
 
-.practice-trends{ margin-top: 3.1vh; }
+.practice-trends{ margin-top: 3vh; }
 
 .amap-container{ background-color: transparent !important; }
-.map-node{ height: 50.5vh; background-color: rgba(0,0,0, .4); border:1px solid #0273F4; border-radius: 8px; overflow: hidden; position: relative; }
+.map-node{ height: 49.5vh; margin-top: 1vh; background-color: rgba(0,0,0, .4); border:1px solid #0273F4; border-radius: 8px; overflow: hidden; position: relative; }
 #mapBox{ width: 100%; height: 100%; }
 .map-maker{ width: 1.2vw; height: 1.2vw; border-radius: 100%; }
 .map-maker.is-center{ width: 1.8vw; height: 1.8vw; background: url(../imgs/maker_center.svg) no-repeat left top; background-size: 100% 100%; }
